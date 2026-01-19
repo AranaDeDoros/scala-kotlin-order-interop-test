@@ -1,5 +1,6 @@
 import io.circe._
 import io.circe.generic.semiauto._
+import io.circe.syntax._
 
 object JsonCodecs {
 
@@ -33,7 +34,7 @@ object JsonCodecs {
   given Encoder[OrderError] = deriveEncoder
 
 
- given Encoder[OrderEvent] = Encoder.instance {
+  given Encoder[OrderEvent] = Encoder.instance {
   case e @ OrderCreatedEvent(order, ts) =>
     Json.obj(
       "type" -> Json.fromString("OrderCreated"),
