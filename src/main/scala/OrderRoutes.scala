@@ -13,13 +13,17 @@ object OrderRoutes {
 
   val routes: HttpRoutes[IO] = HttpRoutes.of[IO] {
 
+    case GET -> Root / "orders" =>
+      val orders = OrderStore.getAll
+      Ok(orders.asJson)
+
     case POST -> Root / "orders" =>
       val event = OrderDispatcher.create()
       OrderEventLog.append(event)
       val order = OrderStore.applyEvent(event)
       Ok(order.asJson)
 
-    case POST -> Root / "orders" / LongVar(id) / "ack" =>
+    case POST -> Root / "orders" / LongVar(id) / "accept" =>
       OrderStore.get(id) match
         case Some(order) =>
           OrderDispatcher.accept(order) match

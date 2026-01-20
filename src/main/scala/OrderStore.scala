@@ -1,4 +1,5 @@
 import scala.collection.concurrent.TrieMap
+import scala.collection.mutable
 
 object OrderStore {
 
@@ -13,6 +14,9 @@ object OrderStore {
 
     orders.update(order.id, order)
     order
+
+  def getAll: Seq[Order] =
+    orders.flatMap { o => get(o._1) }.toSeq
 
   def get(id: Long): Option[Order] =
     orders.get(id)
